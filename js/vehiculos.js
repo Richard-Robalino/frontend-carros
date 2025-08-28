@@ -44,7 +44,7 @@ const vehiculosTable = document.getElementById('vehiculosTable').querySelector('
 
 async function loadVehiculos() {
   try {
-    const res = await fetch('http://localhost:4000/api/vehiculos', { headers: authHeader() });
+    const res = await fetch('https://backend-autos-6.onrender.com/api/vehiculos', { headers: authHeader() });
     if (!res.ok) throw new Error('Error al cargar vehículos');
     const vehiculos = await res.json();
 
@@ -75,7 +75,7 @@ async function loadVehiculos() {
 
 async function deleteVehiculo(id) {
   try {
-    const res = await fetch(`http://localhost:4000/api/vehiculos/${id}`, { method: 'DELETE', headers: authHeader() });
+    const res = await fetch(`https://backend-autos-6.onrender.com/api/vehiculos/${id}`, { method: 'DELETE', headers: authHeader() });
     if (!res.ok) throw new Error("Error al eliminar");
     showSuccess('Vehículo eliminado');
     await loadVehiculos();
@@ -87,7 +87,7 @@ async function deleteVehiculo(id) {
 
 async function editVehiculo(id) {
   try {
-    const res = await fetch(`http://localhost:4000/api/vehiculos/${id}`, { headers: authHeader() });
+    const res = await fetch(`https://backend-autos-6.onrender.com/api/vehiculos/${id}`, { headers: authHeader() });
     if (!res.ok) throw new Error('No se pudo obtener el vehículo');
     const v = await res.json();
 
@@ -127,14 +127,14 @@ document.getElementById('vehiculoForm').addEventListener('submit', async e => {
     let res;
     if (editVehiculoId) {
       // Editar vehículo
-      res = await fetch(`http://localhost:4000/api/vehiculos/${editVehiculoId}`, {
+      res = await fetch(`https://backend-autos-6.onrender.com/api/vehiculos/${editVehiculoId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({ marca, modelo, anio_fabricacion, placa, color, tipo_vehiculo, kilometraje, descripcion })
       });
     } else {
       // Crear vehículo
-      res = await fetch('http://localhost:4000/api/vehiculos', {
+      res = await fetch('https://backend-autos-6.onrender.com/api/vehiculos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({ marca, modelo, anio_fabricacion, placa, color, tipo_vehiculo, kilometraje, descripcion })
