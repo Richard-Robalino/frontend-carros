@@ -1,4 +1,5 @@
 let editReservaId = null;
+const API_URL = import.meta.env.VITE_API_URL;
 
 const reservasTable = document.getElementById('reservasTable').querySelector('tbody');
 const clienteSelect = document.getElementById('clienteId');
