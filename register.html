@@ -169,7 +169,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
 
   // Si pasa todas las validaciones, enviar al backend
   try {
-    const res = await fetch('http://localhost:4000/api/auth/register', {
+    const res = await fetch('https://backend-autos-6.onrender.com/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nombre, apellido, email, password })
