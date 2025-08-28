@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Renta de Carros</title>
+  <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Fondo general */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('../img/car-bg.jpg') no-repeat center center/cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Capa oscura encima del fondo */
+.overlay {
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Contenedor login/registro */
+.login-container {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  width: 350px;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Título */
+.login-container h1 {
+  margin-bottom: 1.5rem;
+  color: #222;
+}
+
+/* Inputs */
+.login-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.2s ease;
+}
+
+.login-container input:focus {
+  border: 1px solid #e63946;
+  outline: none;
+}
+
+/* Botón */
+.login-container button {
+  width: 100%;
+  padding: 12px;
+  background: #e63946;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-container button:hover {
+  background: #c82333;
+}
+
+/* Texto inferior */
+.login-container p {
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.login-container a {
+  color: #e63946;
+  text-decoration: none;
+}
+
+.login-container a:hover {
+  text-decoration: underline;
+}
+
+/* Errores */
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+
+/* Animación entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+    </style>
+       
+</head>
+
+<body>
+  <div class="overlay"></div>
+  <div class="login-container">
+    <h1>Crear Cuenta</h1>
+    <form id="registerForm">
+      <input type="text" id="nombre" placeholder="Nombre" required style="width: 330px;">
+      <input type="text" id="apellido" placeholder="Apellido" required style="width: 330px;">
+      <input type="email" id="email" placeholder="Correo electrónico" required style="width: 330px;">
+      <input type="password" id="password" placeholder="Contraseña" required style="width: 330px;">
+      <button type="submit">Registrarse</button>
+    </form>
+    <p id="registerError" class="error"></p>
+    <p>¿Ya tienes cuenta? <a href="index.html">Inicia sesión</a></p>
+  </div>
+
+  <script>
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const nombre = document.getElementById('nombre').value.trim();
+  const apellido = document.getElementById('apellido').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errorElement = document.getElementById('registerError');
+
+  // Validaciones
+  if (!nombre || !apellido || !email || !password) {
+    errorElement.innerText = "Todos los campos son obligatorios.";
+    return;
+  }
+
+  const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{1,20}$/;
+
+  if (!nameRegex.test(nombre)) {
+    errorElement.innerText = "El nombre solo puede contener letras y hasta 20 caracteres.";
+    return;
+  }
+
+  if (!nameRegex.test(apellido)) {
+    errorElement.innerText = "El apellido solo puede contener letras y hasta 20 caracteres.";
+    return;
+  }
+
+  if (password.length > 20) {
+    errorElement.innerText = "La contraseña no puede tener más de 20 caracteres.";
+    return;
+  }
+
+  // Si pasa todas las validaciones, enviar al backend
+  try {
+    const res = await fetch('http://localhost:4000/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, apellido, email, password })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+
+    alert("✅ Registro exitoso. Ahora inicia sesión.");
+    window.location.href = "index.html";
+  } catch (err) {
+    errorElement.innerText = err.message;
+  }
+});
+</script>
+
+</body>
+
+</html>

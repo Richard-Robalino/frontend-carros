@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Renta de Carros</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      font-size: 14px;
+    }
+
+    header {
+      background: #007bff;
+      color: #fff;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    header button {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    nav {
+      width: 180px;
+      background: #fff;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 75px;
+      bottom: 0;
+      padding: 1rem 0.5rem;
+    }
+
+    nav button {
+      display: block;
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      color: #333;
+      border-radius: 5px;
+    }
+
+    nav button:hover {
+      background: #f0f0f0;
+    }
+
+    main {
+      margin-left: 200px;
+      padding: 1.5rem;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card img {
+      width: 100%;
+      max-width: 250px;
+      height: auto;
+      margin: 0 auto 0.8rem auto;
+      display: block;
+    }
+
+    .card h3 {
+      margin: 0.4rem 0;
+      font-size: 1.1rem;
+      color: #007bff;
+    }
+
+    .modal {
+      position: fixed;
+      top: 100;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 10px;
+      padding: 18px;
+      width: 430px;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .close-btn {
+      float: right;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🚗 Sistema de Renta de Carros</h1>
+    <div>
+      <span id="userGreeting">Hola, Usuario</span>
+      <button id="logoutBtn">Salir</button>
+    </div>
+  </header>
+
+  <nav>
+    <button onclick="showTab('dashboard')">Inicio</button>
+    <button onclick="showTab('clientes')">Clientes</button>
+    <button onclick="showTab('vehiculos')">Vehículos</button>
+    <button onclick="showTab('reservas')">Reservas</button>
+  </nav>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="tab">
+      <h2>Bienvenido, <span id="userNameDashboard">Usuario</span></h2>
+
+      <div class="cards-container">
+        <div class="card" onclick="showTab('clientes')">
+          <img src="img/clientes.jpg" alt="Clientes">
+          <h3>Clientes</h3>
+          <p>Registrar y gestionar clientes</p>
+        </div>
+        <div class="card" onclick="showTab('vehiculos')">
+          <img src="img/vehiculos.jpg" alt="Vehículos">
+          <h3>Vehículos</h3>
+          <p>Administrar flota de vehículos</p>
+        </div>
+        <div class="card" onclick="showTab('reservas')">
+          <img src="img/reservas.jpg" alt="Reservas">
+          <h3>Reservas</h3>
+          <p>Gestionar reservas activas</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENTES -->
+    <section id="clientes" class="tab hidden">
+      <h2>Gestión de Clientes</h2>
+      <button id="openClienteModal" class="btn-primary">➕ Nuevo Cliente</button>
+      <div id="clienteModal" class="modal hidden">
+        <div class="modal-content">
+          <span class="close-btn" onclick="closeClienteModal()">&times;</span>
+          <h3 id="modalTitle">Nuevo Cliente</h3>
+          <form id="clienteForm">
+            <input type="text" id="cedula" placeholder="Cédula" maxlength="10" required style="width: 400px;">
+            <input type="text" id="nombre" placeholder="Nombre" maxlength="20" required style="width: 400px;">
+            <input type="text" id="apellido" placeholder="Apellido" maxlength="20" required style="width: 400px;">
+            <input type="email" id="emailCliente" placeholder="Email" required style="width: 400px;">
+            <input type="text" id="telefono" placeholder="Teléfono" maxlength="10" required style="width: 400px;">
+            <input type="text" id="ciudad" placeholder="Ciudad" maxlength="20" required style="width: 400px;">
+            <input type="text" id="direccion" placeholder="Dirección" required style="width: 400px;">
+            <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+            <input type="date" id="fecha_nacimiento" required style="width: 400px; margin-bottom: 15px;">
+            <button type="submit" class="btn-primary">Guardar</button>
+          </form>
+        </div>
+      </div>
+      <table id="clientesTable">
+        <thead>
+          <tr>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Ciudad</th>
+            <th>Dirección</th>
+            <th>Fecha Nac.</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- VEHÍCULOS -->
+    <section id="vehiculos" class="tab hidden">
+      <h2>Gestión de Vehículos</h2>
+      <button id="openVehiculoModal">➕ Nuevo Vehículo</button>
+      <table id="vehiculosTable">
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Color</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Kilometraje</th>
+            <th>Año</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <div id="vehiculoModal" class="modal hidden">
+      <div class="modal-content">
+        <h3 id="vehiculoModalTitle">Nuevo Vehículo</h3>
+        <form id="vehiculoForm">
+          <input type="text" id="placa" placeholder="Placa" required style="width: 400px;">
+          <input type="text" id="marca" placeholder="Marca" required style="width: 400px;">
+          <input type="text" id="modelo" placeholder="Modelo" required style="width: 400px;">
+          <input type="text" id="color" placeholder="Color" required style="width: 400px;">
+          <input type="text" id="tipo_vehiculo" placeholder="Tipo" required style="width: 400px;">
+          <input type="text" id="descripcion" placeholder="Descripción" style="width: 400px;">
+          <input type="number" id="kilometraje" placeholder="Kilometraje" required style="width: 400px;">
+          <input type="number" id="anio_fabricacion" placeholder="Año" required style="width: 400px;">
+          <div class="modal-actions">
+            <button type="submit">Guardar</button>
+            <button type="button" onclick="closeVehiculoModal()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    
+    <!-- RESERVAS -->
+    <section id="reservas" class="tab hidden">
+      <h2>Gestión de Reservas</h2>
+      <button type="button" onclick="nuevaReserva()">➕ Nueva Reserva</button>
+      <div id="reservaModal" class="modal hidden">
+        <div class="modal-content">
+          <h3 id="reservaModalTitle">Nueva Reserva</h3>
+          <form id="reservaForm">
+            <label for="clienteId">Cliente:</label>
+            <select id="clienteId" required style="width: 400px; margin-bottom: 10px;">
+              <option value="">Seleccione Cliente</option>
+            </select>
+            <label for="vehiculoId">Vehículo:</label>
+            <select id="vehiculoId" required style="width: 400px; margin-bottom: 10px;">
+              <option value="">Seleccione Vehículo</option>
+            </select>
+            <label for="codigo">Código de Reserva:</label>
+            <input type="text" id="codigo" maxlength="20" required style="width: 400px; margin-bottom: 10px;">
+            <label for="fechaInicio">Fecha de Inicio:</label>
+            <input type="date" id="fechaInicio" required style="width: 400px; margin-bottom: 10px;">
+            <label for="fechaFin">Fecha de Fin:</label>
+            <input type="date" id="fechaFin" required style="width: 400px; margin-bottom: 10px;">
+            <div class="modal-actions">
+              <button type="submit">Guardar Reserva</button>
+              <button type="button" onclick="closeReservaModal()">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <table id="reservasTable" style="margin-top:20px;">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Cliente</th>
+            <th>Vehículo</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    // ===== VALIDAR SESIÓN =====
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.nombre) {
+      window.location.href = "index.html";
+    } else {
+      document.getElementById('userGreeting').innerText = `Hola, ${user.nombre}`;
+      document.getElementById('userNameDashboard').innerText = user.nombre;
+    }
+
+    // CERRAR SESIÓN
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        window.location.href = "index.html";
+      });
+    }
+
+    // MOSTRAR TABS
+    function showTab(tabId) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
+      const tab = document.getElementById(tabId);
+      if (tab) tab.classList.remove('hidden');
+    }
+  </script>
+
+  <script src="js/utils.js"></script>
+  <script src="js/clientes.js"></script>
+  <script src="js/vehiculos.js"></script>
+  <script src="js/reservas.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+
+</html>
