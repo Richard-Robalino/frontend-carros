@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   if (!loginForm) return; // Evita errores si el form no existe
+const API_URL = import.meta.env.VITE_API_URL;
 
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
