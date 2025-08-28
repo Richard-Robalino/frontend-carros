@@ -1,5 +1,13 @@
 {
-  "name": "frontend-carros",
+  "name": "renta-de-carros-frontend",
   "version": "1.0.0",
-  "private": true
+  "description": "Frontend para Renta de Carros usando Vite",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
 }
