@@ -1,7 +1,7 @@
 let editId = null; // Si es null => crear, si tiene valor => editar
 
 const clientesTable = document.getElementById('clientesTable').querySelector('tbody');
-
+const API_URL = import.meta.env.VITE_API_URL;
 // Abrir / Cerrar modal 
 document.getElementById("openClienteModal").onclick = () => { 
   editId = null; 
@@ -43,7 +43,7 @@ document.getElementById("telefono").addEventListener("input", e => {
 // Cargar clientes en tabla
 async function loadClientes() {
   try {
-    const res = await fetch('https://backend-autos-6.onrender.com/api/clientes', { headers: authHeader() });
+    const res = await fetch('${API_URL}/api/clientes', { headers: authHeader() });
     if (!res.ok) throw new Error('Error al cargar clientes');
     const clientes = await res.json();
 
@@ -75,7 +75,7 @@ async function loadClientes() {
 async function deleteCliente(id) {
   if (!confirm("¿Seguro que deseas eliminar este cliente?")) return;
   try {
-    const res = await fetch(`https://backend-autos-6.onrender.com/api/clientes/${id}`, { method: 'DELETE', headers: authHeader() });
+    const res = await fetch(`${API_URL}/api/clientes/${id}`, { method: 'DELETE', headers: authHeader() });
     if (res.ok) {
       showSuccess('Cliente eliminado');
       await loadClientes();
@@ -91,7 +91,7 @@ async function deleteCliente(id) {
 // Editar cliente
 async function editCliente(id) {
   try {
-    const res = await fetch(`https://backend-autos-6.onrender.com/api/clientes/${id}`, { headers: authHeader() });
+    const res = await fetch(`${API_URL}/api/clientes/${id}`, { headers: authHeader() });
     if (!res.ok) throw new Error('No se pudo obtener el cliente');
     const c = await res.json();
 
@@ -131,14 +131,14 @@ clienteForm.addEventListener('submit', async e => {
     let res;
     const wasEdit = !!editId;
     if (wasEdit) {
-      res = await fetch(`https://backend-autos-6.onrender.com/api/clientes/${editId}`, {
+      res = await fetch(`${API_URL}/api/clientes/${editId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({ cedula, nombre, apellido, email, telefono, ciudad, direccion, fecha_nacimiento })
       });
       editId = null;
     } else {
-      res = await fetch('https://backend-autos-6.onrender.com/api/clientes', {
+      res = await fetch('${API_URL}/api/clientes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({ cedula, nombre, apellido, email, telefono, ciudad, direccion, fecha_nacimiento })
