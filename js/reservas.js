@@ -11,7 +11,7 @@ const btnSubmitReserva = reservaForm.querySelector('button[type="submit"]');
 // =============================
 async function loadClientes() {
   try {
-    const res = await fetch('https://backend-autos-6.onrender.com/api/clientes', { headers: authHeader() });
+    const res = await fetch('${API_URL}/api/clientes', { headers: authHeader() });
     const data = await res.json();
     clienteSelect.innerHTML = `<option value="">Seleccione Cliente</option>` +
       data.map(c => `<option value="${c._id}">${c.nombre} ${c.apellido}</option>`).join('');
@@ -25,7 +25,7 @@ async function loadClientes() {
 // =============================
 async function loadVehiculos() {
   try {
-    const res = await fetch('https://backend-autos-6.onrender.com/api/vehiculos', { headers: authHeader() });
+    const res = await fetch('${API_URL}/api/vehiculos', { headers: authHeader() });
     const data = await res.json();
     vehiculoSelect.innerHTML = `<option value="">Seleccione Vehículo</option>` +
       data.map(v => `<option value="${v._id}">${v.marca} ${v.modelo} (${v.placa})</option>`).join('');
@@ -39,7 +39,7 @@ async function loadVehiculos() {
 // =============================
 async function loadReservas() {
   try {
-    const res = await fetch('https://backend-autos-6.onrender.com/api/reservas', { headers: authHeader() });
+    const res = await fetch('${API_URL}/api/reservas', { headers: authHeader() });
     const data = await res.json();
 
     reservasTable.innerHTML = "";
@@ -92,7 +92,7 @@ reservaForm.addEventListener('submit', async e => {
 
   // Validar que no exista reserva duplicada para el mismo vehículo
   try {
-    const resExist = await fetch('https://backend-autos-6.onrender.com/api/reservas', { headers: authHeader() });
+    const resExist = await fetch('${API_URL}/api/reservas', { headers: authHeader() });
     const reservas = await resExist.json();
 
     const overlap = reservas.some(r => 
@@ -115,7 +115,7 @@ reservaForm.addEventListener('submit', async e => {
   // Guardar o actualizar
   try {
     if (editReservaId) {
-      const res = await fetch(`https://backend-autos-6.onrender.com/api/reservas/${editReservaId}`, {
+      const res = await fetch(`${API_URL}/api/reservas/${editReservaId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify(data)
@@ -123,7 +123,7 @@ reservaForm.addEventListener('submit', async e => {
       if (!res.ok) throw new Error("Error al actualizar");
       showSuccess("✅ Reserva actualizada correctamente");
     } else {
-      const res = await fetch(`https://backend-autos-6.onrender.com/api/reservas`, {
+      const res = await fetch(`${API_URL}/api/reservas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify(data)
@@ -179,7 +179,7 @@ function closeReservaModal() {
 // =============================
 async function editarReserva(id) {
   try {
-    const res = await fetch(`https://backend-autos-6.onrender.com/api/reservas/${id}`, { headers: authHeader() });
+    const res = await fetch(`${API_URL}/api/reservas/${id}`, { headers: authHeader() });
     const r = await res.json();
 
     editReservaId = r._id;
@@ -209,7 +209,7 @@ async function eliminarReserva(id) {
   if (!confirm("¿Seguro que desea eliminar esta reserva?")) return;
 
   try {
-    const res = await fetch(`https://backend-autos-6.onrender.com/api/reservas/${id}`, {
+    const res = await fetch(`${API_URL}/api/reservas/${id}`, {
       method: 'DELETE',
       headers: authHeader()
     });
